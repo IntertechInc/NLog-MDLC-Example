@@ -38,7 +38,7 @@ Steps to include trackingId as a log output property:
             <parameter name="@trackingId" layout="${mdlc:item=trackingId}" />
         </target>
 
-4. Finally, set the "trackingId" in code prior to any logging occuring (Note: Ideally this value would
+2. Finally, set the "trackingId" in code prior to any logging occuring (Note: Ideally this value would
    be known and set as early as possible)
 
             string trackingId = Guid.NewGuid().ToString();

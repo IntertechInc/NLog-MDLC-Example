@@ -1,8 +1,7 @@
 # NLog-MDLC-Example
 Example of using NLog Mapped Diagnostics Logical Context to add custom elements to logging output.
 
-##Adding Custom Log Properties, e.g. TrackingId (Optional)
-********************************************************
+##Adding Custom Log Properties, e.g. TrackingId
 If you need to add custom properties like a TrackingId to your log output you can use the MappedDiagnosticsLogicalContext (MDLC) Layout Renderer made available in 
 NLog as of version 4.1.2. Previously MDLC was available in NLog.Contrib. MappedDiagnosticsLogicContext is similar to the NLog native MappedDiagnosticsContext, however it 
 maintains the value of your properties across asynchronous context, where MappedDiagnosticContext is stored in thread local storage and is only available to the initializing 
@@ -16,12 +15,12 @@ Steps to include trackingId as a log output property:
 
     a. Example for file logging (note use of ${mdlc:item=trackingId})
 
-        `<target xsi:type="File" name="f" fileName="${basedir}/logs/${shortdate}.log" layout="${longdate} ${uppercase:${level}} ${mdlc:item=trackingId} ${message}" />`
+        <target xsi:type="File" name="f" fileName="${basedir}/logs/${shortdate}.log" layout="${longdate} ${uppercase:${level}} ${mdlc:item=trackingId} ${message}" />
         
     b. Example for sql database logging (note use of @trackingId parameter in both the sql and parameter list; also note you will need to add the trackingId column 
 	   to your logging table
 
-        ```<target xsi:type="Database" name="db">
+        <target xsi:type="Database" name="db">
             <dbProvider>System.Data.SqlClient</dbProvider>
             <connectionStringName>LogConnection</connectionStringName>
             <commandText>
@@ -38,13 +37,13 @@ Steps to include trackingId as a log output property:
             <parameter name="@log_exception" layout="${exception:format=tostring}" />
             <parameter name="@trackingId" layout="${mdlc:item=trackingId}" />
         </target>
-		```
+		
 
 2. Finally, set the "trackingId" in code prior to any logging occuring (Note: Ideally this value would
    be known and set as early as possible)
 
-            ```string trackingId = Guid.NewGuid().ToString();
+            string trackingId = Guid.NewGuid().ToString();
             NLog.MappedDiagnosticsLogicalContext.Set("trackingId", trackingId);
             
 			// From this point on "trackindId" will be logged in your logging output. No additional code is required.
-			```
+			
